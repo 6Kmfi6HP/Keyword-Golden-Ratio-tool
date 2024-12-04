@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,7 +13,7 @@ const KGRCalculator = () => {
   const [keyword, setKeyword] = useState('');
   const [titleResults, setTitleResults] = useState('');
   const [monthlySearches, setMonthlySearches] = useState('');
-  const [kgr, setKgr] = useState(null);
+  const [kgr, setKgr] = useState<number | null>(null);
   const [records, setRecords] = useLocalStorage<KGRRecord[]>('kgr-records', []);
   const [batchInput, setBatchInput] = useState('');
   const [batchResults, setBatchResults] = useState<KGRRecord[]>([]);
@@ -54,13 +54,13 @@ const KGRCalculator = () => {
     setRecords((prev) => [...results, ...prev].slice(0, 100));
   };
 
-  const getAnalysisColor = (kgr) => {
+  const getAnalysisColor = (kgr: number): string => {
     if (kgr < 0.25) return 'bg-green-100 border-green-200';
     if (kgr <= 1.00) return 'bg-blue-100 border-blue-200';
     return 'bg-yellow-100 border-yellow-200';
   };
 
-  const getAnalysisText = (kgr) => {
+  const getAnalysisText = (kgr: number): string => {
     if (kgr < 0.25) return '建议操作';
     if (kgr <= 1.00) return '可以尝试';
     return '竞争较大';
@@ -168,11 +168,14 @@ const KGRCalculator = () => {
                   id="batchKeywords"
                   value={batchInput}
                   onChange={(e) => setBatchInput(e.target.value)}
-                  className="w-full min-h-[200px] p-4 border rounded-lg resize-y"
+                  className="w-full min-h-[200px] p-4 border rounded-lg resize-y bg-gray-50"
                   placeholder="输入关键词，每行一个"
                 />
               </div>
-              <Button onClick={handleBatchAnalysis} className="w-full py-6 text-lg">
+              <Button 
+                onClick={handleBatchAnalysis} 
+                className="w-full bg-[#1c1c1c] text-white hover:bg-[#2c2c2c]"
+              >
                 开始批量分析
               </Button>
               {batchResults.length > 0 && (
